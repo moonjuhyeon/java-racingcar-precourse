@@ -2,14 +2,19 @@ package racinggame.model;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
+import org.mockito.MockedStatic;
 
+import nextstep.utils.Randoms;
 import racinggame.code.ErrorCode;
 import racinggame.exception.CarException;
 
@@ -65,6 +70,35 @@ public class CarsTest {
 			() -> assertThat(carList.get(2).getName()).isEqualTo("car3"),
 			() -> assertThat(carList.get(0).getForward()).isZero(),
 			() -> assertThat(carList.get(0).getStop()).isZero()
+		);
+	}
+
+	@DisplayName("Cars Randoms를 사용하여 자동차를 전진, 정지 값을 갱신하는 테스트")
+	@ParameterizedTest(name = "{index} ==> randomNumber {0}, stop {1}, forward {2}")
+	@CsvSource(value = {
+		"1, 0, 1",
+		"4, 1, 0",
+		"0, 0, 1",
+		"9, 1, 0",
+	})
+	void moveCarsTest(int randomNumber, int forward, int stop) {
+		// given
+		Cars cars = new Cars.CarsBuilder().carList("a,b,c").build();
+		MockedStatic<Randoms> mockRandoms = mockStatic(Randoms.class);
+		// when
+		mockRandoms.when(
+			() -> Randoms.pickNumberInRange(anyInt(), anyInt()))
+			.thenReturn(randomNumber);
+		cars.moveCars();
+		mockRandoms.close();
+		// then
+		assertAll(
+			() -> assertThat(cars.getCarList().get(0).getForward()).isEqualTo(forward),
+			() -> assertThat(cars.getCarList().get(0).getStop()).isEqualTo(stop),
+			() -> assertThat(cars.getCarList().get(1).getForward()).isEqualTo(forward),
+			() -> assertThat(cars.getCarList().get(1).getStop()).isEqualTo(stop),
+			() -> assertThat(cars.getCarList().get(2).getForward()).isEqualTo(forward),
+			() -> assertThat(cars.getCarList().get(2).getStop()).isEqualTo(stop)
 		);
 	}
 }

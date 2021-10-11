@@ -16,6 +16,12 @@ public class Cars {
 		return carList;
 	}
 
+	public void moveCars() {
+		for (Car car : carList) {
+			car.moveCar();
+		}
+	}
+
 	public static class CarsBuilder {
 		private List<Car> carList = new ArrayList<>();
 

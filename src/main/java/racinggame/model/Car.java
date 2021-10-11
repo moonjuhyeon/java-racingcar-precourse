@@ -1,5 +1,6 @@
 package racinggame.model;
 
+import nextstep.utils.Randoms;
 import racinggame.code.CarValueRange;
 import racinggame.code.ErrorCode;
 import racinggame.exception.CarException;
@@ -35,16 +36,8 @@ public class Car {
 		return forward;
 	}
 
-	public void setForward(int forward) {
-		this.forward = forward;
-	}
-
 	public int getStop() {
 		return stop;
-	}
-
-	public void setStop(int stop) {
-		this.stop = stop;
 	}
 
 	public String getOutputMove() {
@@ -53,6 +46,19 @@ public class Car {
 			sb.append("-");
 		}
 		return this.name + " : " + sb.toString();
+	}
+
+	public void moveCarInteger(int i) {
+		if (i < 4) {
+			this.stop++;
+			return;
+		}
+		this.forward++;
+	}
+
+	public void moveCar() {
+		moveCarInteger(Randoms.pickNumberInRange(CarValueRange.MIN_NUMBER_RANGE.getCarValueRange(),
+			CarValueRange.MAX_NUMBER_RANGE.getCarValueRange()));
 	}
 
 	public static class CarBuilder {

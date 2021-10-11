@@ -2,13 +2,17 @@ package racinggame.model;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.MockedStatic;
 
+import nextstep.utils.Randoms;
 import racinggame.code.ErrorCode;
 import racinggame.exception.CarException;
 
@@ -100,5 +104,44 @@ public class CarTest {
 		String outputMoveString = car.getOutputMove();
 		// then
 		assertThat(outputMoveString).isEqualTo(wantResult);
+	}
+
+	@DisplayName("Car 정수값을 입력하여 자동차를 전진, 정지 값을 갱신하는 테스트")
+	@Test
+	void moveCarUsingInteger() {
+		// given
+		Car car = new Car.CarBuilder().name("mini").build();
+		// when
+		car.moveCarInteger(5);
+		car.moveCarInteger(3);
+		// then
+		assertAll(
+			() -> assertThat(car.getForward()).isEqualTo(1),
+			() -> assertThat(car.getStop()).isEqualTo(1),
+			() -> assertThat(car.getOutputMove()).isEqualTo("mini : -")
+		);
+	}
+
+	@DisplayName("Car Randoms를 사용하여 자동차를 전진, 정지 값을 갱신하는 테스트")
+	@ParameterizedTest(name = "{index} ==> randomNumber {0}, stop {1}, forward {2}")
+	@CsvSource(value = {
+		"3, 1, 0",
+		"5, 0, 1",
+		"2, 1, 0",
+		"9, 0, 1"
+	})
+	void moveCarUsingRandams(int randomNumber, int stop, int forword) {
+		// given
+		Car car = new Car.CarBuilder().name("mini").build();
+		MockedStatic<Randoms> mockRandoms = mockStatic(Randoms.class);
+		// when
+		mockRandoms.when(
+			() -> Randoms.pickNumberInRange(anyInt(), anyInt()))
+			.thenReturn(randomNumber);
+		car.moveCar();
+		mockRandoms.close();
+		// then
+		assertThat(car.getStop()).isEqualTo(stop);
+		assertThat(car.getForward()).isEqualTo(forword);
 	}
 }
