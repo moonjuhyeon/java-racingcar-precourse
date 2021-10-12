@@ -1,5 +1,7 @@
 package racinggame.view;
 
+import racinggame.exception.CarException;
+
 public class OutputView {
 	public static void printGameResultString() {
 		System.out.println("실행 결과");
@@ -15,5 +17,9 @@ public class OutputView {
 
 	public static void printGameWinner(String winner) {
 		System.out.println("최종 우승자는 " + winner + " 입니다.");
+	}
+
+	public static void printErrorMessage(CarException carException) {
+		System.out.println(carException.getMessage());
 	}
 }
