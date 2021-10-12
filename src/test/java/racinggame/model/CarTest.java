@@ -130,7 +130,7 @@ public class CarTest {
 		"2, 1, 0",
 		"9, 0, 1"
 	})
-	void moveCarUsingRandams(int randomNumber, int stop, int forword) {
+	void moveCarUsingRandoms(int randomNumber, int stop, int forward) {
 		// given
 		Car car = new Car.CarBuilder().name("mini").build();
 		MockedStatic<Randoms> mockRandoms = mockStatic(Randoms.class);
@@ -142,6 +142,6 @@ public class CarTest {
 		mockRandoms.close();
 		// then
 		assertThat(car.getStop()).isEqualTo(stop);
-		assertThat(car.getForward()).isEqualTo(forword);
+		assertThat(car.getForward()).isEqualTo(forward);
 	}
 }
