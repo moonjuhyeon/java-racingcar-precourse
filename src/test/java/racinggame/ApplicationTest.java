@@ -33,6 +33,14 @@ public class ApplicationTest extends NSTest {
 		});
 	}
 
+	@Test
+	void 게임횟수에_대한_예외_처리() {
+		assertRandomTest(() -> {
+			run("pobi,woni", "one", "1");
+			verify("pobi : -", "woni : ", "최종 우승자는 pobi 입니다.", ERROR_MESSAGE);
+		}, MOVING_FORWARD, STOP);
+	}
+
 	@AfterEach
 	void tearDown() {
 		outputStandard();
