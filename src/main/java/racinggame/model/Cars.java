@@ -32,7 +32,7 @@ public class Cars {
 
 		public List<Car> convertInputToCarList(String input) {
 			for (String name : StringUtils.convertInputToStringArray(input)) {
-				carList.add(new Car.CarBuilder().name(name).build());
+				carList.add(new Car.CarBuilder().name(name.trim()).build());
 			}
 			return this.carList;
 		}
